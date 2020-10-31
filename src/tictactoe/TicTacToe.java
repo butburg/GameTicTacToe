@@ -14,4 +14,12 @@ public interface TicTacToe {
      * @throws StatusException can occure when game hasn't started yet
      */
     TTTSymbol pick(String username, TTTSymbol wantedSymbol) throws GameException, StatusException;
+
+    /**
+     * set a pice on board
+     * @param symbol
+     * @param position
+     * @return
+     */
+    boolean set(TTTSymbol symbol, TTTposition position);
 }
