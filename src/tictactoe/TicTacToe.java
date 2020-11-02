@@ -21,5 +21,5 @@ public interface TicTacToe {
      * @param position
      * @return
      */
-    boolean set(TTTSymbol symbol, TTTposition position);
+    boolean set(TTTSymbol symbol, BoardPosition position) throws StatusException, GameException;
 }

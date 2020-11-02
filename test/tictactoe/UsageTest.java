@@ -60,7 +60,7 @@ public class UsageTest {
         TTTSymbol p1Symbol = ttt.pick(P1, TTTSymbol.O);
         //reconsidered (==think over)
         p1Symbol = ttt.pick(P1, TTTSymbol.X);
-        TTTSymbol p2Symbol = ttt.pick(P2, TTTSymbol.O);
+        TTTSymbol p2Symbol = ttt.pick(P2, TTTSymbol.X);
         assertEquals(TTTSymbol.X, p1Symbol);
         assertEquals(TTTSymbol.O, p2Symbol);
     }
@@ -71,7 +71,7 @@ public class UsageTest {
     @Test()
     public void failurePickSymbol3Times() {
         TicTacToe ttt = this.getTicTacToe();
-        assertThrows(GameException.class, () -> {
+        assertThrows(StatusException.class, () -> {
             ttt.pick(P1, TTTSymbol.X);
             ttt.pick(P2, TTTSymbol.X);
             ttt.pick(P3, TTTSymbol.X);
@@ -89,7 +89,7 @@ public class UsageTest {
         TTTSymbol p1Symbol = ttt.pick(P1, TTTSymbol.X);
         TTTSymbol p2Symbol = ttt.pick(P2, TTTSymbol.O);
 
-        TTTposition pos = new TTTposition(1, 2);
+        BoardPosition pos = new BoardPosition(0, 1);
         assertFalse(ttt.set(p1Symbol, pos));
     }
 
@@ -99,7 +99,7 @@ public class UsageTest {
         TTTSymbol p1Symbol = ttt.pick(P1, TTTSymbol.X);
         TTTSymbol p2Symbol = ttt.pick(P2, TTTSymbol.O);
 
-        TTTposition pos = new TTTposition(3, 3);
+        BoardPosition pos = new BoardPosition(2, 2);
         assertFalse(ttt.set(p1Symbol, pos));
     }
 
@@ -111,7 +111,7 @@ public class UsageTest {
         TTTSymbol p1Symbol = ttt.pick(P1, TTTSymbol.X);
         TTTSymbol p2Symbol = ttt.pick(P2, TTTSymbol.O);
 
-        TTTposition pos = new TTTposition(2, 4);
+        BoardPosition pos = new BoardPosition(1, 3);
         assertThrows(GameException.class, () -> {
             assertFalse(ttt.set(p1Symbol, pos));
         });
@@ -123,7 +123,7 @@ public class UsageTest {
         TTTSymbol p1Symbol = ttt.pick(P1, TTTSymbol.X);
         TTTSymbol p2Symbol = ttt.pick(P2, TTTSymbol.O);
 
-        TTTposition pos = new TTTposition(4, 1);
+        BoardPosition pos = new BoardPosition(3, 0);
         assertThrows(GameException.class, () -> {
             assertFalse(ttt.set(p1Symbol, pos));
         });
@@ -136,19 +136,19 @@ public class UsageTest {
         TTTSymbol p1Symbol = ttt.pick(P1, TTTSymbol.X);
         TTTSymbol p2Symbol = ttt.pick(P2, TTTSymbol.O);
 
-        TTTposition pos = new TTTposition(0, 2);
+        BoardPosition pos = new BoardPosition(-1, 1);
         assertThrows(GameException.class, () -> {
             assertFalse(ttt.set(p1Symbol, pos));
         });
     }
 
     @Test()
-    public void failureSet() throws GameException, StatusException {
+    public void failureSet4() throws GameException, StatusException {
         TicTacToe ttt = this.getTicTacToe();
         TTTSymbol p1Symbol = ttt.pick(P1, TTTSymbol.X);
         TTTSymbol p2Symbol = ttt.pick(P2, TTTSymbol.O);
 
-        TTTposition pos = new TTTposition(-1, 0);
+        BoardPosition pos = new BoardPosition(0, -1);
 
         assertThrows(GameException.class, () -> {
             assertFalse(ttt.set(p1Symbol, pos));
@@ -163,7 +163,7 @@ public class UsageTest {
         TTTSymbol p1Symbol = ttt.pick(P1, TTTSymbol.X);
         TTTSymbol p2Symbol = ttt.pick(P2, TTTSymbol.O);
 
-        TTTposition pos = new TTTposition(2, 2);
+        BoardPosition pos = new BoardPosition(1, 1);
         ttt.set(p1Symbol, pos);
         assertThrows(StatusException.class, () -> {
             ttt.pick(P1, TTTSymbol.O);
@@ -177,10 +177,26 @@ public class UsageTest {
         TTTSymbol p1Symbol = ttt.pick(P1, TTTSymbol.X);
         TTTSymbol p2Symbol = ttt.pick(P2, TTTSymbol.O);
 
-        TTTposition pos = new TTTposition(2, 2);
+        BoardPosition pos = new BoardPosition(1, 1);
         ttt.set(p1Symbol, pos);
+        //pick same field again
         assertThrows(GameException.class, () -> {
             ttt.set(p2Symbol, pos);
         });
+    }
+
+    @Test()
+    public void goodWin() throws GameException, StatusException {
+        TicTacToe ttt = this.getTicTacToe();
+
+        TTTSymbol p1Symbol = ttt.pick(P1, TTTSymbol.X);
+        TTTSymbol p2Symbol = ttt.pick(P2, TTTSymbol.X);
+
+        ttt.set(p1Symbol, new BoardPosition(0, 0));
+        ttt.set(p2Symbol, new BoardPosition(0, 1));
+        ttt.set(p1Symbol, new BoardPosition(1, 1));
+        ttt.set(p2Symbol, new BoardPosition(1, 0));
+        assertEquals(true,ttt.set(p1Symbol, new BoardPosition(2, 2)));
+
     }
 }
